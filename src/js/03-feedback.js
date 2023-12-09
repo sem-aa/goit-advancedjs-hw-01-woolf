@@ -6,30 +6,27 @@ const message = form.querySelector('[name="message"]');
 
 const KEY_FIELD = 'feedback-form-state';
 
-const objData = { email: '', message: '' };
+let dataLocal = JSON.parse(localStorage.getItem(KEY_FIELD)) || {};
+
+if (dataLocal.email || dataLocal.message) {
+  email.value = dataLocal.email ?? '';
+  message.value = dataLocal.message ?? '';
+}
 
 const handleInputChange = e => {
   const inputName = e.target.name;
   const inputMessage = e.target.value;
-  
-  objData[inputName] = inputMessage;
 
-  localStorage.setItem(KEY_FIELD, JSON.stringify(objData));
+  dataLocal[inputName] = inputMessage;
+
+  localStorage.setItem(KEY_FIELD, JSON.stringify(dataLocal));
 };
-
-if (localStorage.getItem(KEY_FIELD)) {
-  const dataLocal = JSON.parse(localStorage.getItem(KEY_FIELD));
-
-  email.value = dataLocal.email;
-  message.value = dataLocal.message;
-}
 
 const handleSubmit = e => {
   e.preventDefault();
   localStorage.removeItem(KEY_FIELD);
-  console.log(objData);
-  objData.email = '';
-  objData.message = '';
+  console.log(dataLocal);
+  dataLocal = {};
   email.value = '';
   message.value = '';
 };
